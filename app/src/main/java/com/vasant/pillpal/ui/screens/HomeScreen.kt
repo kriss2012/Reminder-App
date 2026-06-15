@@ -18,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import com.vasant.pillpal.ui.components.BottomNavigationBar
 import com.vasant.pillpal.ui.components.HomeContent
 import com.vasant.pillpal.ui.components.TopBarHomeScreen
