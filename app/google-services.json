@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "385941507208",
+    "project_id": "doseflow-32160",
+    "storage_bucket": "doseflow-32160.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:385941507208:android:9c509d2353b413cea9633d",
+        "android_client_info": {
+          "package_name": "com.vasant.pillpal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSTlBY6PxbePa-RtRRojQUmLm0dsVejTY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

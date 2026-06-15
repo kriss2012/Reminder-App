@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">DoseFlow</string>
+
+    <!-- Field Labels -->
+    <string name="text_username">Username</string>
+    <string name="text_password">Password</string>
+    <string name="text_confirm_password">Confirm Password</string>
+    <string name="text_email">Email</string>
+
+    <string name="text_enter_password">Please enter Your Password!</string>
+
+
+</resources>
