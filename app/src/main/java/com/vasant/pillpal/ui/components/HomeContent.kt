@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -36,13 +37,11 @@ import com.vasant.pillpal.data.db.Medicine
 import com.vasant.pillpal.data.db.MedicineEvent
 import com.vasant.pillpal.ui.navigation.MainUiRoute
 import com.vasant.pillpal.ui.presentation.MedicineType
-import com.vasant.pillpal.ui.theme.SecondaryContainerColor
 import com.vasant.pillpal.ui.theme.rubikFamily
 import com.vasant.pillpal.ui.theme.AccentMintGreen
 import com.vasant.pillpal.ui.theme.AccentBlue
 import com.vasant.pillpal.ui.theme.AccentPink
 import com.vasant.pillpal.ui.theme.AccentYellow
-import com.vasant.pillpal.ui.theme.SurfaceWhite
 import com.vasant.pillpal.ui.viewmodel.MedicineViewModel
 import com.vasant.pillpal.utils.getFormattedTime
 import java.text.SimpleDateFormat
@@ -57,10 +56,10 @@ fun HomeContent(
     val medicine = medicineViewModel.meds.collectAsStateWithLifecycle()
     var selectedDate by remember { mutableStateOf(System.currentTimeMillis()) }
 
-    val calendarDays = remember {
+    val calendarDays = remember(selectedDate) {
         val list = mutableListOf<Long>()
-        val cal = Calendar.getInstance()
-        cal.add(Calendar.DAY_OF_YEAR, -3) // Start 3 days ago
+        val cal = Calendar.getInstance().apply { timeInMillis = selectedDate }
+        cal.add(Calendar.DAY_OF_YEAR, -3) // Start 3 days before selectedDate
         for (i in 0 until 10) {
             list.add(cal.timeInMillis)
             cal.add(Calendar.DAY_OF_YEAR, 1)
@@ -96,12 +95,58 @@ fun HomeContent(
             // Calendar Scheduling strip
             item {
                 Spacer(modifier = Modifier.height(16.dp))
-                CalendarStrip(
-                    days = calendarDays,
-                    selectedDate = selectedDate,
-                    medicines = medicine.value,
-                    onDateSelected = { selectedDate = it }
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(modifier = Modifier.weight(1f)) {
+                        CalendarStrip(
+                            days = calendarDays,
+                            selectedDate = selectedDate,
+                            medicines = medicine.value,
+                            onDateSelected = { selectedDate = it }
+                        )
+                    }
+                    var showDatePicker by remember { mutableStateOf(false) }
+                    IconButton(
+                        onClick = { showDatePicker = true },
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                            contentColor = MaterialTheme.colorScheme.primary
+                        ),
+                        modifier = Modifier
+                            .padding(end = 20.dp)
+                            .size(48.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "Select Date",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+
+                    if (showDatePicker) {
+                        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = selectedDate)
+                        DatePickerDialog(
+                            onDismissRequest = { showDatePicker = false },
+                            confirmButton = {
+                                TextButton(onClick = {
+                                    datePickerState.selectedDateMillis?.let { selectedDate = it }
+                                    showDatePicker = false
+                                }) {
+                                    Text("OK", fontFamily = rubikFamily, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(onClick = { showDatePicker = false }) {
+                                    Text("Cancel", fontFamily = rubikFamily, color = Color.Gray)
+                                }
+                            }
+                        ) {
+                            DatePicker(state = datePickerState)
+                        }
+                    }
+                }
             }
 
             // Medicine List Section Header
@@ -134,14 +179,14 @@ fun HomeContent(
                     if (filteredMedicines.isNotEmpty()) {
                         Surface(
                             shape = RoundedCornerShape(12.dp),
-                            color = SecondaryContainerColor.copy(alpha = 0.15f)
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
                         ) {
                             Text(
                                 text = "${filteredMedicines.size} meds",
                                 fontFamily = rubikFamily,
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 13.sp,
-                                color = SecondaryContainerColor,
+                                color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                             )
                         }
@@ -218,8 +263,8 @@ fun GreetingSection() {
                     .background(
                         Brush.horizontalGradient(
                             colors = listOf(
-                                SecondaryContainerColor,
-                                SecondaryContainerColor.copy(alpha = 0.85f)
+                                MaterialTheme.colorScheme.primary,
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.85f)
                             )
                         )
                     )
@@ -335,7 +380,7 @@ fun QuickStatsSection(medicines: List<Medicine>) {
             modifier = Modifier.weight(1f),
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(
-                containerColor = SecondaryContainerColor.copy(alpha = 0.15f)
+                containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -429,7 +474,7 @@ fun CalendarStrip(
             val dayNumber = cal.get(Calendar.DAY_OF_MONTH).toString() // "15"
             val hasMeds = medicines.any { isSameDay(it.time, dayMillis) }
 
-            val bg = if (isSelected) MaterialTheme.colorScheme.primary else SurfaceWhite
+            val bg = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
             val textCol = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
             val subTextCol = if (isSelected) Color.White.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
             val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.LightGray.copy(alpha = 0.2f)
@@ -492,7 +537,7 @@ fun EmptyStateSection(navController: NavHostController) {
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(
-                containerColor = SurfaceWhite
+                containerColor = MaterialTheme.colorScheme.surface
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
         ) {
@@ -505,7 +550,7 @@ fun EmptyStateSection(navController: NavHostController) {
                 // Icon Container
                 Surface(
                     shape = CircleShape,
-                    color = SecondaryContainerColor.copy(alpha = 0.15f),
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
                     modifier = Modifier.size(90.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
@@ -513,7 +558,7 @@ fun EmptyStateSection(navController: NavHostController) {
                             painter = painterResource(R.drawable.medicine),
                             contentDescription = null,
                             modifier = Modifier.size(45.dp),
-                            tint = SecondaryContainerColor
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
@@ -550,7 +595,7 @@ fun EmptyStateSection(navController: NavHostController) {
                         .height(56.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = SecondaryContainerColor
+                        containerColor = MaterialTheme.colorScheme.primary
                     ),
                     elevation = ButtonDefaults.buttonElevation(
                         defaultElevation = 4.dp,
@@ -626,14 +671,14 @@ fun MedicinePillSection(
             .shadow(
                 elevation = if (isCompleted) 1.dp else 2.dp,
                 shape = RoundedCornerShape(20.dp),
-                spotColor = if (isCompleted) Color.Transparent else SecondaryContainerColor.copy(alpha = 0.05f)
+                spotColor = if (isCompleted) Color.Transparent else MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
             ),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isCompleted) {
                 Color(0xFFF1F8F4)
             } else {
-                SurfaceWhite
+                MaterialTheme.colorScheme.surface
             }
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -789,7 +834,7 @@ fun MedicinePillSection(
                 color = if (isCompleted) {
                     AccentMintGreen
                 } else {
-                    SecondaryContainerColor
+                    MaterialTheme.colorScheme.primary
                 }
             ) {
                 Row(
@@ -837,14 +882,15 @@ private fun isSameDay(time1: Long, time2: Long): Boolean {
            cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
 }
 
+@Composable
 private fun getMedicineTypeColor(type: MedicineType?): Color {
     return when (type) {
-        MedicineType.TABLET -> SecondaryContainerColor
+        MedicineType.TABLET -> MaterialTheme.colorScheme.primary
         MedicineType.CAPSULE -> AccentPink
         MedicineType.SYRUP -> AccentBlue
         MedicineType.DROPS -> AccentMintGreen
         MedicineType.OTHERS -> AccentYellow
-        null -> SecondaryContainerColor
+        null -> MaterialTheme.colorScheme.primary
     }
 }
 
