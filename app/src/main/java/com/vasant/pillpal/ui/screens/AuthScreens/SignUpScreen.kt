@@ -6,11 +6,11 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -507,39 +507,30 @@ fun SignUpScreen(
                             Spacer(Modifier.height(20.dp))
 
                             // Sign In link with better styling
-                            val annotated = buildAnnotatedString {
-                                withStyle(SpanStyle(color = Color.Gray, fontSize = 14.sp)) {
-                                    append("Already have an account? ")
-                                }
-                                pushStringAnnotation(tag = "login", annotation = "login")
-                                withStyle(
-                                    SpanStyle(
-                                        color = SecondaryContainerColor,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 14.sp
-                                    )
-                                ) {
-                                    append("Sign In")
-                                }
-                                pop()
-                            }
-
-                            ClickableText(
-                                text = annotated,
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 4.dp),
-                                style = MaterialTheme.typography.bodyMedium.copy(
-                                    textAlign = TextAlign.Center,
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Already have an account? ",
+                                    color = Color.Gray,
+                                    fontSize = 14.sp,
                                     fontFamily = rubikFamily
-                                ),
-                                onClick = { offset ->
-                                    annotated.getStringAnnotations(tag = "login", start = offset, end = offset)
-                                        .firstOrNull()?.let {
-                                            navController.navigate(AuthenticationRoute.LoginScreen)
-                                        }
-                                }
-                            )
+                                )
+                                Text(
+                                    text = "Sign In",
+                                    color = SecondaryContainerColor,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp,
+                                    fontFamily = rubikFamily,
+                                    modifier = Modifier.clickable {
+                                        navController.navigate(AuthenticationRoute.LoginScreen)
+                                    }
+                                )
+                            }
                         }
                     }
                 }
