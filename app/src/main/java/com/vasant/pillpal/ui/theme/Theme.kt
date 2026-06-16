@@ -19,6 +19,8 @@ private val WhiskerColorScheme = lightColorScheme(
     surface = SurfaceWhite,
     onBackground = fontColor,
     onSurface = fontColor,
+    secondaryContainer = pillColor,
+    onSecondaryContainer = fontColor
 )
 
 // Minty Fresh Theme
@@ -29,6 +31,8 @@ private val MintyColorScheme = lightColorScheme(
     surface = Color(0xFFFFFFFF),
     onBackground = Color(0xFF1D3C37),
     onSurface = Color(0xFF1D3C37),
+    secondaryContainer = Color(0xFFE0F2F1),
+    onSecondaryContainer = Color(0xFF004D40)
 )
 
 // Lavender Fields Theme
@@ -39,6 +43,8 @@ private val LavenderColorScheme = lightColorScheme(
     surface = Color(0xFFFFFFFF),
     onBackground = Color(0xFF2E2452),
     onSurface = Color(0xFF2E2452),
+    secondaryContainer = Color(0xFFEDE7F6),
+    onSecondaryContainer = Color(0xFF311B92)
 )
 
 // Charcoal Dark Theme
@@ -49,6 +55,8 @@ private val CharcoalColorScheme = darkColorScheme(
     surface = Color(0xFF23201D),
     onBackground = Color(0xFFF7F5F2),
     onSurface = Color(0xFFF7F5F2),
+    secondaryContainer = Color(0xFF2E2A27),
+    onSecondaryContainer = Color(0xFFF7F5F2)
 )
 
 @Composable
