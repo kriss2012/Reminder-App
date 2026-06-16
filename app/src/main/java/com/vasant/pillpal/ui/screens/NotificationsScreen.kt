@@ -24,10 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import com.vasant.pillpal.R
 import com.vasant.pillpal.ui.notifications.NotificationItem
 import com.vasant.pillpal.ui.notifications.NotificationType
-import com.vasant.pillpal.ui.theme.SecondaryContainerColor
 import com.vasant.pillpal.ui.theme.jetbrainFamily
 import com.vasant.pillpal.ui.viewmodel.NotificationsViewModel
 
@@ -35,7 +35,7 @@ import com.vasant.pillpal.ui.viewmodel.NotificationsViewModel
 @Composable
 fun NotificationsScreen(
     navController: NavHostController,
-    windowSizeClass: WindowSizeClass,
+    windowSizeClass: WindowSizeClass? = null,
     viewModel: NotificationsViewModel = hiltViewModel()
 ) {
     val notifications by viewModel.items.collectAsState(initial = emptyList())
@@ -77,7 +77,7 @@ fun NotificationsScreen(
                                 fontFamily = jetbrainFamily,
                                 fontSize = if (isTablet) 15.sp else 13.sp,
                                 fontWeight = FontWeight.Medium,
-                                color = SecondaryContainerColor
+                                color = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
@@ -193,7 +193,7 @@ fun NotificationCard(
                             modifier = Modifier
                                 .size(if (isTablet) 12.dp else 10.dp)
                                 .clip(CircleShape)
-                                .background(SecondaryContainerColor)
+                                .background(MaterialTheme.colorScheme.primary)
                         )
                     }
                 }
@@ -271,13 +271,13 @@ fun EmptyNotificationsState(modifier: Modifier = Modifier, isTablet: Boolean = f
                 modifier = Modifier
                     .size(if (isTablet) 140.dp else 120.dp)
                     .clip(CircleShape)
-                    .background(SecondaryContainerColor.copy(alpha = 0.12f)),
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(R.drawable.notificationbing),
                     contentDescription = null,
-                    tint = SecondaryContainerColor,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(if (isTablet) 64.dp else 56.dp)
                 )
             }
