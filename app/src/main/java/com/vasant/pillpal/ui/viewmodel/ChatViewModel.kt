@@ -23,6 +23,10 @@ class ChatViewModel @Inject constructor(
         listOf(ChatUiModel.Message.initConv)
     )
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean>
+        get() = _isLoading
+
     fun sendMessage(message: String) {
         viewModelScope.launch {
             val myChat = ChatUiModel.Message(
@@ -31,7 +35,10 @@ class ChatViewModel @Inject constructor(
             )
             _conversation.emit(_conversation.value + myChat)
 
+            _isLoading.emit(true)
             val botResponse = geminiService.generateMedicalResponse(message)
+            _isLoading.emit(false)
+
             _conversation.emit(
                 _conversation.value + ChatUiModel.Message(
                     text = botResponse,
@@ -41,3 +48,4 @@ class ChatViewModel @Inject constructor(
         }
     }
 }
+
