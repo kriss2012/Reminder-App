@@ -128,8 +128,6 @@ fun SignUpScreen(
                     )
                 )
             )
-            .systemBarsPadding()
-            .imePadding()
     ) {
         // Decorative circles in background
         DecorativeBackground()
@@ -138,6 +136,8 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .systemBarsPadding()
+                .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = horizontalPadding, vertical = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
