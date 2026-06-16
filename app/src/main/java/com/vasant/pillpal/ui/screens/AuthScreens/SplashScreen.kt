@@ -262,7 +262,7 @@ fun SplashScreen(navController: NavController, isLoggedIn: Boolean = false) {
                     Box {
                         repeat(3) { shadowIndex ->
                             Text(
-                                text = "DoseFlow",
+                                text = "Kiri Reminder",
                                 fontFamily = rubikFamily,
                                 fontSize = 52.sp,
                                 fontWeight = FontWeight.ExtraBold,
@@ -273,7 +273,7 @@ fun SplashScreen(navController: NavController, isLoggedIn: Boolean = false) {
                             )
                         }
                         Text(
-                            text = "DoseFlow",
+                            text = "Kiri Reminder",
                             fontFamily = rubikFamily,
                             fontSize = 52.sp,
                             fontWeight = FontWeight.ExtraBold,
