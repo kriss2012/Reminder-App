@@ -119,6 +119,11 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    suspend fun changePassword(oldPass: String, newPass: String): com.vasant.pillpal.utils.AuthState {
+        val email = com.vasant.pillpal.utils.Prefs.getEmail(context) ?: ""
+        return auth.updatePassword(email, oldPass, newPass)
+    }
+
     companion object {
         const val DEFAULT_SOUND_TITLE = "Default notification sound"
     }
