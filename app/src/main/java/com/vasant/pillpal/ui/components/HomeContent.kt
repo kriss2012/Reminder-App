@@ -46,7 +46,9 @@ import com.vasant.pillpal.ui.viewmodel.MedicineViewModel
 import com.vasant.pillpal.utils.getFormattedTime
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.OptIn
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeContent(
     navController: NavHostController,
