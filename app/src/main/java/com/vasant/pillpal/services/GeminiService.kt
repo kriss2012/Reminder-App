@@ -35,7 +35,7 @@ class GeminiService @Inject constructor(
         systemInstruction = content {
             text(
                 """
-                You are a professional medical AI assistant for DoseFlow, a medication management app. Your role is to provide evidence-based, educational health information while maintaining a supportive and compassionate tone.
+                You are a professional medical AI assistant for Kiri Reminder, a medication management app. Your role is to provide evidence-based, educational health information while maintaining a supportive and compassionate tone.
 
                 CORE RESPONSIBILITIES:
                 ✓ Provide accurate, concise medication information (dosages, interactions, side effects, schedules)
@@ -82,7 +82,7 @@ class GeminiService @Inject constructor(
             val dateFormatFull = SimpleDateFormat("MMMM dd, yyyy hh:mm a", Locale.getDefault())
 
             if (medicines.isEmpty()) {
-                "\n\n[USER CONTEXT] No medications currently scheduled in DoseFlow."
+                "\n\n[USER CONTEXT] No medications currently scheduled in Kiri Reminder."
             } else {
                 val upcomingMeds = medicines.filter { !it.isCompleted }
                 val completedMeds = medicines.filter { it.isCompleted }
