@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
             val themeName by themePrefs.theme.collectAsState()
             PillPalTheme(themeName = themeName) {
                 val windowSizeClass: WindowSizeClass = calculateWindowSizeClass(this@MainActivity)
-                DoseFlow(windowSizeClass = windowSizeClass)
+                KiriReminder(windowSizeClass = windowSizeClass)
             }
         }
     }
