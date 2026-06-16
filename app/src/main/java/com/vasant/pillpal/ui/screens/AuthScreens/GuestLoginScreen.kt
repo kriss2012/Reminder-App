@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import com.vasant.pillpal.ui.navigation.NavigationRoute
 import com.vasant.pillpal.ui.theme.BackgroundColor
 import com.vasant.pillpal.ui.theme.SecondaryContainerColor
@@ -39,7 +40,7 @@ import com.vasant.pillpal.ui.theme.fontColor
 import com.vasant.pillpal.ui.theme.rubikFamily
 
 @Composable
-fun GuestLoginScreen(navController: NavController, windowSizeClass: WindowSizeClass) {
+fun GuestLoginScreen(navController: NavController, windowSizeClass: WindowSizeClass? = null) {
     val context = LocalContext.current
 
     Box(
@@ -61,6 +62,7 @@ fun GuestLoginScreen(navController: NavController, windowSizeClass: WindowSizeCl
             onClick = { navController.popBackStack() },
             modifier = Modifier
                 .align(Alignment.TopStart)
+                .statusBarsPadding()
                 .padding(16.dp)
         ) {
             Icon(
@@ -75,6 +77,7 @@ fun GuestLoginScreen(navController: NavController, windowSizeClass: WindowSizeCl
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .navigationBarsPadding()
                 .padding(24.dp)
                 .padding(top = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -110,7 +113,7 @@ fun GuestLoginScreen(navController: NavController, windowSizeClass: WindowSizeCl
 
             // Subtitle
             Text(
-                text = "Explore DoseFlow Without Creating an Account",
+                text = "Explore Kiri Reminder Without Creating an Account",
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
                 fontFamily = rubikFamily,
