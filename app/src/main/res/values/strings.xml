@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DoseFlow</string>
+    <string name="app_name">Kiri Reminder</string>
 
     <!-- Field Labels -->
     <string name="text_username">Username</string>
