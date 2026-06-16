@@ -9,7 +9,7 @@ import com.vasant.pillpal.utils.Prefs
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-private const val TAG = "DoseFlowAuth"
+private const val TAG = "KiriReminderAuth"
 
 class AuthImplementation @Inject constructor(
     private val apiService: DoseFlowApiService,
