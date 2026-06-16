@@ -40,8 +40,8 @@ import kotlinx.coroutines.delay
 fun ChatScreen(navHost: NavHostController, windowSizeClass: WindowSizeClass? = null) {
     val viewModel: ChatViewModel = hiltViewModel()
     val conversation by viewModel.conversation.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
     val listState = rememberLazyListState()
-    var isLoading by remember { mutableStateOf(false) }
 
     // Auto-scroll to bottom when new messages arrive
     LaunchedEffect(conversation.size) {
@@ -116,9 +116,7 @@ fun ChatScreen(navHost: NavHostController, windowSizeClass: WindowSizeClass? = n
             // Input area
             ChatInputBox(
                 onSendMessage = { message ->
-                    isLoading = true
                     viewModel.sendMessage(message)
-                    isLoading = false
                 },
                 modifier = Modifier.fillMaxWidth()
             )
