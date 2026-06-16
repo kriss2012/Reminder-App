@@ -11,15 +11,15 @@ import com.vasant.pillpal.ui.navigation.NavigationApp
 import dagger.hilt.android.HiltAndroidApp
 
 @Composable
-fun DoseFlow(windowSizeClass: WindowSizeClass) {
+fun KiriReminder(windowSizeClass: WindowSizeClass) {
     NavigationApp(windowSizeClass)
 }
 
 const val MEDICINE_CHANNEL_ID = "medicine_channel"
-const val MEDICINE_CHANNEL_NAME = " DoseFlow  Notifications"
+const val MEDICINE_CHANNEL_NAME = " Kiri Reminder  Notifications"
 
 @HiltAndroidApp
-class DoseFlowApp : Application() {
+class KiriReminderApp : Application() {
     override fun onCreate() {
         super.onCreate()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
