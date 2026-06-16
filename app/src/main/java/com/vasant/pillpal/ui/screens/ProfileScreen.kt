@@ -3,6 +3,8 @@ package com.vasant.pillpal.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,10 +27,109 @@ import androidx.navigation.NavHostController
 import com.vasant.pillpal.R
 import com.vasant.pillpal.ui.theme.SecondaryContainerColor
 import com.vasant.pillpal.ui.theme.jetbrainFamily
+import com.vasant.pillpal.utils.Prefs
+import androidx.compose.ui.platform.LocalContext
+import android.widget.Toast
+import androidx.compose.foundation.clickable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavHostController) {
+    val context = LocalContext.current
+    var name by remember { mutableStateOf(Prefs.getName(context) ?: "John Doe") }
+    val email = remember { Prefs.getEmail(context) ?: "john.doe@email.com" }
+    var phone by remember { mutableStateOf(Prefs.getPhone(context) ?: "+1 234 567 8900") }
+    var dob by remember { mutableStateOf(Prefs.getDob(context) ?: "January 15, 1990") }
+    var gender by remember { mutableStateOf(Prefs.getGender(context) ?: "Male") }
+    var location by remember { mutableStateOf(Prefs.getLocation(context) ?: "New York, USA") }
+
+    var showEditDialog by remember { mutableStateOf(false) }
+
+    if (showEditDialog) {
+        var tempName by remember { mutableStateOf(name) }
+        var tempPhone by remember { mutableStateOf(phone) }
+        var tempDob by remember { mutableStateOf(dob) }
+        var tempGender by remember { mutableStateOf(gender) }
+        var tempLocation by remember { mutableStateOf(location) }
+
+        AlertDialog(
+            onDismissRequest = { showEditDialog = false },
+            title = {
+                Text(
+                    text = "Edit Profile",
+                    fontFamily = jetbrainFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+            },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.verticalScroll(rememberScrollState())
+                ) {
+                    OutlinedTextField(
+                        value = tempName,
+                        onValueChange = { tempName = it },
+                        label = { Text("Full Name", fontFamily = jetbrainFamily) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = tempPhone,
+                        onValueChange = { tempPhone = it },
+                        label = { Text("Phone Number", fontFamily = jetbrainFamily) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = tempDob,
+                        onValueChange = { tempDob = it },
+                        label = { Text("Date of Birth", fontFamily = jetbrainFamily) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = tempGender,
+                        onValueChange = { tempGender = it },
+                        label = { Text("Gender", fontFamily = jetbrainFamily) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = tempLocation,
+                        onValueChange = { tempLocation = it },
+                        label = { Text("Location", fontFamily = jetbrainFamily) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        Prefs.setName(context, tempName)
+                        Prefs.setPhone(context, tempPhone)
+                        Prefs.setDob(context, tempDob)
+                        Prefs.setGender(context, tempGender)
+                        Prefs.setLocation(context, tempLocation)
+
+                        name = tempName
+                        phone = tempPhone
+                        dob = tempDob
+                        gender = tempGender
+                        location = tempLocation
+
+                        showEditDialog = false
+                        Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = SecondaryContainerColor)
+                ) {
+                    Text("Save", fontFamily = jetbrainFamily, color = Color.White)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEditDialog = false }) {
+                    Text("Cancel", fontFamily = jetbrainFamily, color = Color.Gray)
+                }
+            }
+        )
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -59,7 +160,7 @@ fun ProfileScreen(navController: NavHostController) {
         ) {
             // Profile Header
             item {
-                ProfileHeaderSection()
+                ProfileHeaderSection(name = name, email = email, onEditClick = { showEditDialog = true })
             }
 
             // Health Statistics
@@ -93,14 +194,25 @@ fun ProfileScreen(navController: NavHostController) {
             }
 
             item {
-                PersonalInfoSection()
+                PersonalInfoSection(
+                    name = name,
+                    email = email,
+                    phone = phone,
+                    dob = dob,
+                    gender = gender,
+                    location = location
+                )
             }
         }
     }
 }
 
 @Composable
-fun ProfileHeaderSection() {
+fun ProfileHeaderSection(
+    name: String,
+    email: String,
+    onEditClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -151,7 +263,7 @@ fun ProfileHeaderSection() {
                             .align(Alignment.BottomEnd)
                     ) {
                         IconButton(
-                            onClick = {},
+                            onClick = onEditClick,
                             modifier = Modifier.size(32.dp)
                         ) {
                             Icon(
@@ -167,7 +279,7 @@ fun ProfileHeaderSection() {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "John Doe",
+                    text = name,
                     fontFamily = jetbrainFamily,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
@@ -177,7 +289,7 @@ fun ProfileHeaderSection() {
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "john.doe@email.com",
+                    text = email,
                     fontFamily = jetbrainFamily,
                     fontSize = 14.sp,
                     color = Color.White.copy(alpha = 0.9f)
@@ -332,7 +444,14 @@ fun HealthStatCard(
 }
 
 @Composable
-fun PersonalInfoSection() {
+fun PersonalInfoSection(
+    name: String,
+    email: String,
+    phone: String,
+    dob: String,
+    gender: String,
+    location: String
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -342,32 +461,32 @@ fun PersonalInfoSection() {
         PersonalInfoCard(
             icon = Icons.Outlined.Person,
             label = "Full Name",
-            value = "John Doe"
+            value = name
         )
         PersonalInfoCard(
             icon = Icons.Outlined.Email,
             label = "Email",
-            value = "john.doe@email.com"
+            value = email
         )
         PersonalInfoCard(
             icon = Icons.Outlined.Phone,
             label = "Phone",
-            value = "+1 234 567 8900"
+            value = phone
         )
         PersonalInfoCard(
             icon = Icons.Outlined.CalendarToday,
             label = "Date of Birth",
-            value = "January 15, 1990"
+            value = dob
         )
         PersonalInfoCard(
             icon = Icons.Outlined.Person,
             label = "Gender",
-            value = "Male"
+            value = gender
         )
         PersonalInfoCard(
             icon = Icons.Outlined.LocationOn,
             label = "Location",
-            value = "New York, USA"
+            value = location
         )
     }
 }
