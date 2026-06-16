@@ -66,8 +66,6 @@ fun SignIn(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundColor)
-            .systemBarsPadding()
-            .imePadding()
     ) {
         // Subtle gradient background
         Box(
@@ -107,7 +105,13 @@ fun SignIn(
         }
 
         // Centered content card
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding()
+                .imePadding(),
+            contentAlignment = Alignment.Center
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
