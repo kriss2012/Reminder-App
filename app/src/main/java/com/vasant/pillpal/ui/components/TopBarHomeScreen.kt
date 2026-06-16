@@ -73,7 +73,7 @@ fun TopBarHomeScreen(navHostController: NavHostController, onNavigationIconClick
                 // App Name
                 Column {
                     Text(
-                        text = "DoseFlow",
+                        text = "Kiri Reminder",
                         fontFamily = jetbrainFamily,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
