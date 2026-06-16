@@ -10,6 +10,6 @@ object APPCONSTANTS {
     const val BASE_URL = "https://api-inference.huggingface.co/"
     
     // Custom Backend URL (Render or Local)
-    const val BACKEND_URL = "https://doesflowbackend.onrender.com/"
+    const val BACKEND_URL = "https://reminderappbackend-51zv.onrender.com/"
     const val LOCAL_BACKEND_URL = "http://10.0.2.2:3000/"
 }
