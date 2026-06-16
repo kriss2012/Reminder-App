@@ -1,6 +1,7 @@
 package com.vasant.pillpal.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -58,7 +59,9 @@ fun TopBarHomeScreen(navHostController: NavHostController, onNavigationIconClick
                 Surface(
                     shape = RoundedCornerShape(12.dp),
                     color = SecondaryContainerColor.copy(alpha = 0.15f),
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clickable { onNavigationIconClick() }
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Icon(
@@ -142,7 +145,7 @@ fun TopBarHomeScreen(navHostController: NavHostController, onNavigationIconClick
                     modifier = Modifier.size(44.dp)
                 ) {
                     IconButton(
-                        onClick = {},
+                        onClick = { navHostController.navigate(MainUiRoute.ProfileScreen) },
                         modifier = Modifier.size(44.dp)
                     ) {
                         Icon(
