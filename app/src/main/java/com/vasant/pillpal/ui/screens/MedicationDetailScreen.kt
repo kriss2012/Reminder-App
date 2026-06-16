@@ -437,9 +437,9 @@ fun ScheduleSection() {
                 .padding(16.dp)
         ) {
             ScheduleItem("Morning", "8:00 AM", true)
-            Divider(modifier = Modifier.padding(vertical = 12.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
             ScheduleItem("Afternoon", "2:00 PM", true)
-            Divider(modifier = Modifier.padding(vertical = 12.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
             ScheduleItem("Evening", "8:00 PM", false)
         }
     }
