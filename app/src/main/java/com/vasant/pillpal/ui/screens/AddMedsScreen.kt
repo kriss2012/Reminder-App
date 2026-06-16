@@ -36,11 +36,7 @@ import com.vasant.pillpal.data.db.MedicineEvent
 import com.vasant.pillpal.ui.components.AddMedTop
 import com.vasant.pillpal.ui.presentation.MedicineState
 import com.vasant.pillpal.ui.presentation.MedicineType
-import com.vasant.pillpal.ui.theme.BackgroundColor
-import com.vasant.pillpal.ui.theme.SecondaryContainerColor
 import com.vasant.pillpal.ui.theme.rubikFamily
-import com.vasant.pillpal.ui.theme.pillColor
-import com.vasant.pillpal.ui.theme.SurfaceWhite
 import com.vasant.pillpal.ui.viewmodel.MedicineViewModel
 import com.vasant.pillpal.utils.ALARM_PERMISSION
 import com.vasant.pillpal.utils.NOTIFICATION_PERMISSION
@@ -75,11 +71,11 @@ fun AddMedsScreen(
 
     Scaffold(
         topBar = { AddMedTop(navController) },
-        containerColor = BackgroundColor,
+        containerColor = MaterialTheme.colorScheme.background,
         contentWindowInsets = WindowInsets.safeDrawing,
         bottomBar = {
             Surface(
-                color = BackgroundColor,
+                color = MaterialTheme.colorScheme.background,
                 shadowElevation = 8.dp
             ) {
                 Box(
@@ -93,7 +89,7 @@ fun AddMedsScreen(
                             if (needsExactAlarmPermission) {
                                 AlertDialog.Builder(context).setTitle("Permission Required")
                                     .setMessage(
-                                        "To ensure you receive timely medication reminders Dose-flow needs permission to set precise alarms. Please tap 'Go to Settings' and enable 'Allow setting alarms and reminders' for our app."
+                                        "To ensure you receive timely medication reminders Kiri Reminder needs permission to set precise alarms. Please tap 'Go to Settings' and enable 'Allow setting alarms and reminders' for our app."
                                     ).setPositiveButton("Go to Settings") { _, _ ->
                                         exactAlarmIntent?.let { context.startActivity(it) }
                                     }.setNegativeButton("Cancel", null)
@@ -101,7 +97,7 @@ fun AddMedsScreen(
                             } else if (!hasPermission(context, NOTIFICATION_PERMISSION)) {
                                 AlertDialog.Builder(context).setTitle("Permission Required")
                                     .setMessage(
-                                        "To ensure you receive timely medication reminders Dose-flow needs permission to set precise alarms. Please tap 'Go to Settings' and enable 'Allow Notification' for our app."
+                                        "To ensure you receive timely medication reminders Kiri Reminder needs permission to set precise alarms. Please tap 'Go to Settings' and enable 'Allow Notification' for our app."
                                     ).setPositiveButton("Go to Settings") { _, _ ->
                                         context.startActivity(notificationIntent)
                                     }.setNegativeButton("Cancel", null)
@@ -116,7 +112,7 @@ fun AddMedsScreen(
                             .height(56.dp),
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = SecondaryContainerColor,
+                            containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = Color.White
                         )
                     ) {
@@ -136,7 +132,7 @@ fun AddMedsScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .background(BackgroundColor)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 20.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -180,7 +176,7 @@ fun MedicineTypeSelector(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -188,7 +184,7 @@ fun MedicineTypeSelector(
             Text(
                 text = "Medicine Type",
                 fontFamily = rubikFamily,
-                color = Color.Black.copy(alpha = 0.8f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = 12.dp)
@@ -201,8 +197,8 @@ fun MedicineTypeSelector(
             ) {
                 MedicineType.entries.forEach { type ->
                     val isSelected = type == selected
-                    val bg = if (isSelected) SecondaryContainerColor else pillColor
-                    val borderColor = if (isSelected) SecondaryContainerColor else Color.Transparent
+                    val bg = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondaryContainer
+                    val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
                     Surface(
                         shape = RoundedCornerShape(12.dp),
                         color = bg,
@@ -215,7 +211,7 @@ fun MedicineTypeSelector(
                             fontFamily = rubikFamily,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = if (isSelected) Color.White else Color.Black.copy(alpha = 0.7f),
+                            color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondaryContainer,
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
                         )
                     }
@@ -277,7 +273,7 @@ fun DosageInputRow(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -285,7 +281,7 @@ fun DosageInputRow(
             Text(
                 text = "Dosage",
                 fontFamily = rubikFamily,
-                color = Color.Black.copy(alpha = 0.8f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = 12.dp)
@@ -307,9 +303,9 @@ fun DosageInputRow(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SecondaryContainerColor,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
                         unfocusedBorderColor = Color.LightGray.copy(alpha = 0.5f),
-                        focusedLabelColor = SecondaryContainerColor
+                        focusedLabelColor = MaterialTheme.colorScheme.primary
                     ),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
                 )
@@ -324,9 +320,9 @@ fun DosageInputRow(
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                             shape = RoundedCornerShape(12.dp),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = SecondaryContainerColor,
+                                focusedBorderColor = MaterialTheme.colorScheme.primary,
                                 unfocusedBorderColor = Color.LightGray.copy(alpha = 0.5f),
-                                focusedLabelColor = SecondaryContainerColor
+                                focusedLabelColor = MaterialTheme.colorScheme.primary
                             ),
                             modifier = Modifier
                                 .menuAnchor()
@@ -399,7 +395,7 @@ fun AddDateTimePill(medicineViewModel: MedicineViewModel) {
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -408,7 +404,7 @@ fun AddDateTimePill(medicineViewModel: MedicineViewModel) {
                 text = "Reminder Schedule",
                 fontFamily = rubikFamily,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black.copy(alpha = 0.8f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
@@ -422,7 +418,7 @@ fun AddDateTimePill(medicineViewModel: MedicineViewModel) {
                     modifier = Modifier
                         .weight(1.2f)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(pillColor)
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
                         .clickable { showDatePicker = true }
                         .padding(horizontal = 14.dp, vertical = 14.dp)
                 ) {
@@ -435,7 +431,7 @@ fun AddDateTimePill(medicineViewModel: MedicineViewModel) {
                             text = dateString,
                             fontFamily = rubikFamily,
                             fontWeight = FontWeight.SemiBold,
-                            color = if (state.date > 0) SecondaryContainerColor else Color.Gray,
+                            color = if (state.date > 0) MaterialTheme.colorScheme.primary else Color.Gray,
                             fontSize = 14.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -450,7 +446,7 @@ fun AddDateTimePill(medicineViewModel: MedicineViewModel) {
                     modifier = Modifier
                         .weight(1f)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(pillColor)
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
                         .clickable { showTimePicker = true }
                         .padding(horizontal = 14.dp, vertical = 14.dp)
                 ) {
@@ -463,7 +459,7 @@ fun AddDateTimePill(medicineViewModel: MedicineViewModel) {
                             text = timeString,
                             fontFamily = rubikFamily,
                             fontWeight = FontWeight.SemiBold,
-                            color = if (state.date > 0) SecondaryContainerColor else Color.Gray,
+                            color = if (state.date > 0) MaterialTheme.colorScheme.primary else Color.Gray,
                             fontSize = 14.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -493,7 +489,7 @@ fun AddDateTimePill(medicineViewModel: MedicineViewModel) {
                     }
                     showDatePicker = false
                 }) {
-                    Text("OK", fontFamily = rubikFamily, color = SecondaryContainerColor, fontWeight = FontWeight.Bold)
+                    Text("OK", fontFamily = rubikFamily, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
@@ -532,7 +528,7 @@ fun AddMedsScreenPill(
     
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -540,7 +536,7 @@ fun AddMedsScreenPill(
             Text(
                 text = title,
                 fontFamily = rubikFamily,
-                color = Color.Black.copy(alpha = 0.8f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = 12.dp)
@@ -569,9 +565,9 @@ fun AddMedsScreenPill(
                 },
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = SecondaryContainerColor,
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = Color.LightGray.copy(alpha = 0.5f),
-                    focusedContainerColor = pillColor,
+                    focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                     unfocusedContainerColor = Color.Transparent
                 ),
                 modifier = Modifier.fillMaxWidth()
@@ -614,7 +610,7 @@ fun AddTimePickerDialog(
                             pickerState.hour, pickerState.minute
                         )
                     }) {
-                        Text("OK", fontFamily = rubikFamily, color = SecondaryContainerColor, fontWeight = FontWeight.Bold)
+                        Text("OK", fontFamily = rubikFamily, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                     }
                 }
             }
