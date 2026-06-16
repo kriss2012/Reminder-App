@@ -20,6 +20,7 @@ import com.vasant.pillpal.ui.screens.ChatScreen
 import com.vasant.pillpal.ui.screens.HomeScreen
 import com.vasant.pillpal.ui.screens.NotificationsScreen
 import com.vasant.pillpal.ui.screens.SettingsScreen
+import com.vasant.pillpal.ui.screens.ProfileScreen
 
 @Composable
 fun NavigationApp(windowSizeClass: WindowSizeClass) {
@@ -115,7 +116,9 @@ fun NavigationApp(windowSizeClass: WindowSizeClass) {
             composable<MainUiRoute.SettingScreen> {
                 SettingsScreen(navController, windowSizeClass = windowSizeClass)
             }
-            composable<MainUiRoute.ProfileScreen> { }
+            composable<MainUiRoute.ProfileScreen> {
+                ProfileScreen(navController)
+            }
         }
 
     }
