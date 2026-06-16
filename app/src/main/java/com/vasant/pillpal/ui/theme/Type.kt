@@ -32,10 +32,10 @@ val Typography = Typography(
     ),
     titleLarge = TextStyle(
         fontFamily = jetbrainFamily,
-        fontWeight = FontWeight.W800,
-        fontSize = 96.sp,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
         lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        letterSpacing = 0.15.sp
     ),
     labelSmall = TextStyle(
         fontFamily = FontFamily.Default,
