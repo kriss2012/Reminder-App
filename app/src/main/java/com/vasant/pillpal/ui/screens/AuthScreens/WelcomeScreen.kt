@@ -76,7 +76,6 @@ fun WelcomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundColor)
-            .systemBarsPadding()
     ) {
         // Subtle gradient background
         Box(
@@ -97,6 +96,7 @@ fun WelcomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .systemBarsPadding()
                 .padding(horizontal = horizontalPadding)
                 .widthIn(max = contentMaxWidth)
                 .align(Alignment.Center),
@@ -121,7 +121,7 @@ fun WelcomeScreen(
 
             // App name
             Text(
-                text = "DoseFlow",
+                text = "Kiri Reminder",
                 fontWeight = FontWeight.Bold,
                 fontSize = titleSize,
                 fontFamily = rubikFamily,
@@ -145,7 +145,7 @@ fun WelcomeScreen(
 
             // Description
             Text(
-                text = "Track your medicine and never miss a dose. DoseFlow helps you manage your medication schedule, sends timely reminders, and ensures you stay on top of your health journey with minimal effort.",
+                text = "Track your medicine and never miss a dose. Kiri Reminder helps you manage your medication schedule, sends timely reminders, and ensures you stay on top of your health journey with minimal effort.",
                 color = fontColor.copy(0.7f),
                 fontWeight = FontWeight.Normal,
                 fontSize = bodySize,
