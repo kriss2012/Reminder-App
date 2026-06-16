@@ -44,6 +44,8 @@ import com.vasant.pillpal.ui.theme.AccentPink
 import com.vasant.pillpal.ui.theme.AccentYellow
 import com.vasant.pillpal.ui.viewmodel.MedicineViewModel
 import com.vasant.pillpal.utils.getFormattedTime
+import com.vasant.pillpal.utils.Prefs
+import androidx.compose.ui.platform.LocalContext
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.OptIn
@@ -245,6 +247,8 @@ fun HomeContent(
 
 @Composable
 fun GreetingSection() {
+    val context = LocalContext.current
+    val userName = remember { Prefs.getName(context) ?: Prefs.getEmail(context)?.substringBefore("@") ?: "User" }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -279,7 +283,7 @@ fun GreetingSection() {
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = getGreeting(),
+                            text = "${getGreeting()}, $userName",
                             fontFamily = rubikFamily,
                             fontWeight = FontWeight.Medium,
                             fontSize = 14.sp,
@@ -729,9 +733,7 @@ fun MedicinePillSection(
                         Color(0xFF2C2C2C).copy(alpha = 0.6f)
                     } else {
                         Color(0xFF2C2520)
-                    },
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
