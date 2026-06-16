@@ -30,13 +30,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import com.vasant.pillpal.data.chat.ChatUiModel
 import com.vasant.pillpal.ui.viewmodel.ChatViewModel
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatScreen(navHost: NavHostController, windowSizeClass: WindowSizeClass) {
+fun ChatScreen(navHost: NavHostController, windowSizeClass: WindowSizeClass? = null) {
     val viewModel: ChatViewModel = hiltViewModel()
     val conversation by viewModel.conversation.collectAsState()
     val listState = rememberLazyListState()
@@ -131,6 +132,7 @@ fun ChatTopBar(onBackClick: () -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .shadow(8.dp),
         color = MaterialTheme.colorScheme.primaryContainer
     ) {
@@ -274,7 +276,7 @@ fun ChatInputBox(
     val isInputEmpty = input.isBlank()
 
     Surface(
-        modifier = modifier,
+        modifier = modifier.navigationBarsPadding(),
         color = MaterialTheme.colorScheme.surface,
         shadowElevation = 8.dp
     ) {
