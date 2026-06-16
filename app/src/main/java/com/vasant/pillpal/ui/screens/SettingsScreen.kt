@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.Help
 import androidx.compose.material.icons.automirrored.outlined.Logout
+import androidx.compose.material.icons.automirrored.outlined.VolumeUp
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -40,6 +41,9 @@ import com.vasant.pillpal.ui.theme.rubikFamily
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.vasant.pillpal.ui.viewmodel.SettingsViewModel
 import com.vasant.pillpal.ui.navigation.AuthenticationRoute
+import com.vasant.pillpal.ui.navigation.MainUiRoute
+import android.widget.Toast
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +58,8 @@ fun SettingsScreen(
 
     var showThemeDialog by remember { mutableStateOf(false) }
     var showSoundDialog by remember { mutableStateOf(false) }
+    var showChangePasswordDialog by remember { mutableStateOf(false) }
+    var showAboutDialog by remember { mutableStateOf(false) }
 
     // Navigate to Login when logout finishes
     LaunchedEffect(loggedOut) {
@@ -216,7 +222,7 @@ fun SettingsScreen(
 
                 item {
                     SettingClickCard(
-                        icon = Icons.Outlined.VolumeUp,
+                        icon = Icons.AutoMirrored.Outlined.VolumeUp,
                         title = "Reminder Ringtone",
                         subtitle = uiState.soundTitle,
                         onClick = { showSoundDialog = true },
@@ -256,7 +262,7 @@ fun SettingsScreen(
                         icon = Icons.Outlined.Person,
                         title = "Edit Profile",
                         subtitle = "Update your personal information",
-                        onClick = {},
+                        onClick = { navController.navigate(MainUiRoute.ProfileScreen) },
                         isTablet = isTablet
                     )
                 }
@@ -266,7 +272,7 @@ fun SettingsScreen(
                         icon = Icons.Outlined.Lock,
                         title = "Change Password",
                         subtitle = "Update your password",
-                        onClick = {},
+                        onClick = { showChangePasswordDialog = true },
                         isTablet = isTablet
                     )
                 }
@@ -282,7 +288,10 @@ fun SettingsScreen(
                         icon = Icons.AutoMirrored.Outlined.Help,
                         title = "Help & FAQs",
                         subtitle = "Get help using Kiri Reminder",
-                        onClick = {},
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/kriss2012/Reminder-App/issues/1"))
+                            context.startActivity(intent)
+                        },
                         isTablet = isTablet
                     )
                 }
@@ -292,7 +301,7 @@ fun SettingsScreen(
                         icon = Icons.Outlined.Info,
                         title = "About",
                         subtitle = "Version 1.1.0",
-                        onClick = {},
+                        onClick = { showAboutDialog = true },
                         isTablet = isTablet
                     )
                 }
@@ -490,7 +499,7 @@ fun SettingsScreen(
                         }
                     }
 
-                    Divider(modifier = Modifier.padding(vertical = 12.dp))
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
 
                     // System File Picker fallback button
                     Row(
@@ -530,6 +539,137 @@ fun SettingsScreen(
                 }
             }
         }
+    }
+
+    if (showChangePasswordDialog) {
+        var oldPassword by remember { mutableStateOf("") }
+        var newPassword by remember { mutableStateOf("") }
+        var confirmPassword by remember { mutableStateOf("") }
+        val scope = rememberCoroutineScope()
+        var errorText by remember { mutableStateOf<String?>(null) }
+
+        AlertDialog(
+            onDismissRequest = { showChangePasswordDialog = false },
+            title = {
+                Text(
+                    text = "Change Password",
+                    fontFamily = rubikFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+            },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    if (errorText != null) {
+                        Text(
+                            text = errorText!!,
+                            color = MaterialTheme.colorScheme.error,
+                            fontSize = 13.sp,
+                            fontFamily = rubikFamily,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                    }
+                    OutlinedTextField(
+                        value = oldPassword,
+                        onValueChange = { oldPassword = it },
+                        label = { Text("Current Password", fontFamily = rubikFamily) },
+                        visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = newPassword,
+                        onValueChange = { newPassword = it },
+                        label = { Text("New Password", fontFamily = rubikFamily) },
+                        visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = confirmPassword,
+                        onValueChange = { confirmPassword = it },
+                        label = { Text("Confirm New Password", fontFamily = rubikFamily) },
+                        visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        if (newPassword != confirmPassword) {
+                            errorText = "Passwords do not match"
+                            return@Button
+                        }
+                        if (newPassword.length < 6) {
+                            errorText = "Password must be at least 6 characters"
+                            return@Button
+                        }
+                        scope.launch {
+                            val res = viewModel.changePassword(oldPassword, newPassword)
+                            if (res.Success) {
+                                showChangePasswordDialog = false
+                                Toast.makeText(context, "Password changed successfully!", Toast.LENGTH_SHORT).show()
+                            } else {
+                                errorText = res.Error ?: "Failed to change password"
+                            }
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text("Change", fontFamily = rubikFamily, color = Color.White)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showChangePasswordDialog = false }) {
+                    Text("Cancel", fontFamily = rubikFamily, color = Color.Gray)
+                }
+            }
+        )
+    }
+
+    if (showAboutDialog) {
+        AlertDialog(
+            onDismissRequest = { showAboutDialog = false },
+            title = {
+                Text(
+                    text = "About Kiri Reminder",
+                    fontFamily = rubikFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+            },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        text = "Kiri Reminder is your personal medication tracker and wellness companion. It is designed to ensure you never miss a dose, helping you keep track of pill names, times, dosages, and notes.",
+                        fontFamily = rubikFamily,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                    )
+                    Text(
+                        text = "Key Features:\n• Custom 3D Animated Splash Screen\n• Intelligent Local/Remote Auto-Syncing\n• Smart Gemini-Powered AI Chatbot Assistant\n• High-performance Offline Database\n• Dynamic Dark & Light Color Themes",
+                        fontFamily = rubikFamily,
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
+                    HorizontalDivider()
+                    Text(
+                        text = "Version: 1.1.0\nDeveloper: Vasant\nCommunity: kriss2012",
+                        fontFamily = rubikFamily,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = { showAboutDialog = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text("Close", fontFamily = rubikFamily, color = Color.White)
+                }
+            }
+        )
     }
 }
 
